@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="componentes/layout :: head"></head>
+
+<body>
+
+	<header th:replace="componentes/layout :: header"></header>
+	
+	<div class="container py-4">
+
+		<div class="card bg-light">			
+			
+			<div>
+				<a th:href="@{/api/socialweb-tienda/tienda/}" class="btn btn-success btn-xs col-sm-1 my-1 mx-1 float-left">Volver</a>
+				<a th:href="@{'/api/socialweb-tienda/tienda/pedidos/' + ${pedido.id} (format=xlsx)}" class="btn btn-success btn-xs col-sm-1  my-1 mx-1 float-right">XLSX</a>
+				<a th:href="@{'/api/socialweb-tienda/tienda/pedidos/' + ${pedido.id} (format=pdf)}" class="btn btn-danger btn-xs col-sm-1  my-1 mx-1 float-right">PDF</a>
+			</div>
+			
+			<div class="card-header" th:text="${titulo}"></div>
+			
+			<div class="card-body">
+								
+				<div class="form-group row">
+				
+					<label for="username" class="col-form-label col-sm-2">Usuario</label>
+					<div class="col-sm-2">
+						<input type="text" readonly th:if="${pedido.usuario != null}" th:value="${pedido.usuario.username}" class="form-control">
+					</div>
+					<label for="observacion" class="col-form-label col-sm-2">Observación</label>
+					<div class="col-sm-6">
+						<input type="text" readonly th:value="${pedido.observacion}" class="form-control">
+					</div>
+					
+				</div>
+				
+				<table class="table table-striped" th:if="${pedido!=null}">
+		
+					<thead>
+						<th style="width: 10%" >ID</th>
+						<th style="width: 20%" th:text="#{text.producto.foto}">FOTO</th>
+						<th style="width: 15%" th:text="#{text.producto.nombre}">NOMBRE</th>
+						<th style="width: 15%" th:text="#{text.producto.precio}">PRECIO</th>
+						<th style="width: 15%" th:text="#{text.producto.cantidad}">CANTIDAD</th>
+						<th style="width: 10%" ></th>
+					</thead>
+		
+					<tbody>
+						<tr th:each="item : ${pedido.items}">
+							<td th:text="${#strings.abbreviate(item.producto.id,10)}"></td>
+							<td>
+								<img th:alt="${item.producto.foto}" th:src="@{'/api/socialweb-tienda/tienda/productos/uploads/' + ${item.producto.foto}}"											
+										style="max-width: 50%; max-height: 50%" class="img-thumbnail rounded">
+							</td>
+							<td th:text="${item.producto.nombre}"></td>
+							<td th:text="${item.producto.precio}"></td>
+							<td th:text="${item.cantidad}"></td>							
+							<td>
+								<a class="btn btn-danger btn-xs" th:href="@{'/api/socialweb-tienda/tienda/pedidos/'+ ${pedido.id}  +'/eliminar/item/'} + ${item.id}" th:text="eliminar" 
+										onclick="confirm('Desea eliminar el registro?')"> </a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				
+			</div>
+		</div>
+	</div>
+	
+	<footer th:replace="componentes/layout :: footer"></footer>
+	
+</body>
+</html>

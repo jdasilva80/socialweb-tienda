@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http:wwww.thymeleaf.org">
+
+<body>
+
+<script type="text/javascript" th:fragment="autocomplete-productos" >
+
+var cargaInicial=true;
+
+$(document).ready(function() {
+	
+	buscarProductos();
+	
+	$("#buscar_producto").keyup(function(){
+				
+		//if($("#buscar_producto").val() == ''){
+			
+			$("#cargarProductosLista").find("tr:gt(0)").remove();			
+			//cargaInicial=true;
+			//buscarProductos();
+			buscarProductosKeyUp($("#buscar_producto").val());
+		//}
+	
+	});
+	
+
+	//$("#buscar_producto").autocomplete({
+
+		//source : function(request, response) {
+			//$.ajax({
+				//url : "/api/socialweb-tienda/tienda/productos/nombre/" + request.term,
+				//dataType : "json",
+				//data : {
+				//	term : request.term
+				//},
+				//success : function(data) {
+				//	response($.map(data, function(producto) {
+				//		return {
+				//			value : producto.id,
+				//			label : producto.nombre,
+				//			precio : producto.precio,
+				//		};
+				//	}));
+			//	},
+		//	});
+	//	},
+	//	select : function(event, ui) {
+			
+			//$("#buscar_producto").val(ui.item.label);
+	//		if(cargaInicial){
+	//			$("#cargarProductosLista tr").remove();	
+	//			cargaInicial=false;
+	//		}
+				
+	//		var linea = $("#plantillaProductosLista").html();
+
+	//		linea = linea.replace(/{ID}/g, ui.item.value);
+	//		linea = linea.replace(/{NOMBRE}/g, ui.item.label);
+	//		linea = linea.replace(/{PRECIO}/g, ui.item.precio);
+
+	//		$("#cargarProductosLista tbody").append(linea);
+	//		return false;
+	//	}
+		//	});
+
+});
+
+function buscarProductos(){
+	
+	$.ajax({
+        url:  "/api/socialweb-tienda/tienda/productos",
+        type: 'get',
+        dataType : "json",
+        success: function(data){
+        	        	
+        	for (var i = 0; i < data.length; i++) {
+
+            	var linea = $("#plantillaProductosLista").html();
+        		
+            	linea = linea.replace(/{ID}/g, data[i].id);
+        		
+        		var foto = "<img th:alt="  +data[i].foto +"\ src=/api/socialweb-tienda/tienda/productos/uploads/" + data[i].foto +											
+					" style=\"max-width: 50%; max-height: 50%\" class=\"img-thumbnail rounded\">";
+        		
+				linea = linea.replace(/{FOTO}/g, foto);
+    			linea = linea.replace(/{NOMBRE}/g, data[i].nombre);
+    			linea = linea.replace(/{PRECIO}/g, data[i].precio);
+    			
+    			var comprarBtn = "<a class=\"btn btn-primary btn-xs\" href=/api/socialweb-tienda/tienda/pedidos/comprar/" + data[i].id+ "> comprar </a>";
+    			
+    			linea = linea.replace(/{COMPRAR}/g, comprarBtn);	
+    			
+    			$("#cargarProductosLista tbody").append(linea);
+        	}
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            var errorMsg = 'Ajax request failed: ' + xhr.responseText;
+            $('#buscar_producto').html(errorMsg);
+          }
+    });	
+}
+
+function buscarProductosKeyUp(value){
+	
+	$.ajax({
+        url:  value == '' ? "/api/socialweb-tienda/tienda/productos" : "/api/socialweb-tienda/tienda/productos/nombre/" + value,
+        type: 'get',
+        dataType : "json",
+        success: function(data){
+        	        	
+        	for (var i = 0; i < data.length; i++) {
+
+            	var linea = $("#plantillaProductosLista").html();
+        		
+				linea = linea.replace(/{ID}/g, data[i].id);
+        		
+        		var foto = "<img th:alt="  +data[i].foto +"\ src=/api/socialweb-tienda/tienda/productos/uploads/" + data[i].foto +											
+					" style=\"max-width: 50%; max-height: 50%\" class=\"img-thumbnail rounded\">";
+        		
+				linea = linea.replace(/{FOTO}/g, foto);
+    			linea = linea.replace(/{NOMBRE}/g, data[i].nombre);
+    			linea = linea.replace(/{PRECIO}/g, data[i].precio);
+    			
+    			var comprarBtn = "<a class=\"btn btn-primary btn-xs\" href=/api/socialweb-tienda/tienda/pedidos/comprar/" + data[i].id+ "> comprar </a>";
+    			
+    			linea = linea.replace(/{COMPRAR}/g, comprarBtn);	
+            	
+    			$("#cargarProductosLista tbody").append(linea);
+        	}
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            var errorMsg = 'Ajax request failed: ' + xhr.responseText;
+            $('#buscar_producto').html(errorMsg);
+          }
+    });	
+}
+
+
+</script>
+
+</body>
+</html>

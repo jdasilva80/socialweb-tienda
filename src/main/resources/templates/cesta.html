@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="componentes/layout :: head"></head>
+
+<body>
+
+	<header th:replace="componentes/layout :: header"></header>
+
+	<div class="container py-4">
+
+		<div class="card bg-light">
+
+			<a th:href="@{/api/socialweb-tienda/tienda/}" class="btn btn-success btn-xs col-sm-1 my-2 mx-2 float-right">Volver</a>
+
+			<div class="card-header" th:text="${titulo}"></div>
+
+			<div class="card-body">
+
+				<form th:action="@{/api/socialweb-tienda/tienda/pedidos/cesta/form}" method="post" th:object="${cesta}" enctype="multipart/form-data">
+					
+					<div class="form-group row">
+					
+						<label for="username" class="col-form-label col-sm-2">Usuario</label>
+						
+						<div class="col-sm-2">
+							<input type="text" readonly th:if="${cesta != null && cesta.usuario != null}" th:value="${cesta.usuario.username}" class="form-control">
+						</div>
+						
+						<label for="observacion" class="col-form-label col-sm-2">Observación</label>
+						
+						<div class="col-sm-6">
+							<input type="text" th:if="${cesta != null}"  th:field="*{observacion}" class="form-control">
+						</div>
+						
+					</div>
+
+					<table class="table table-bordered table-striped" >
+
+						<thead>
+							<th style="width: 10%">ID</th>
+							<th style="width: 15%" th:text="#{text.producto.foto}">FOTO</th>
+							<th style="width: 15%" th:text="#{text.producto.nombre}">NOMBRE</th>
+							<th style="width: 15%" th:text="#{text.producto.precio}">PRECIO</th>
+							<th style="width: 10%" th:text="#{text.producto.cantidad}">CANTIDAD</th>
+							<th style="width: 10%"></th>
+						</thead>
+
+						<tbody th:if="${cesta != null}" id="productosCesta">
+							<tr th:each="item : ${cesta.items}">
+
+								<td class="d-none">
+									<input type="hidden" th:value="${item.producto.id}" name="producto_id[]" />
+								</td>
+
+								<td th:text="${#strings.abbreviate(item.producto.id,10)}"></td>
+
+								<td><img th:alt="${item.producto.foto}"
+									th:src="@{'/api/socialweb-tienda/tienda/productos/uploads/' + ${item.producto.foto}}"
+									style="max-width: 50%; max-height: 50%"
+									class="img-thumbnail rounded"></td>
+
+								<td th:text="${item.producto.nombre}"></td>
+
+								<td th:id="'precio_'+ ${item.producto.id}"
+									th:text="${item.producto.precio}"></td>
+
+								<td><input type="number" name="cantidad[]" min="1"
+									th:id="'cantidad_'+ ${item.producto.id}" class="form-control"
+									th:value="${item.cantidad}" onchange="itemsHelper.calcularTotal(); itemsHelper.guardarCantidad(this)" /></td>
+
+								<td><a class="btn btn-danger btn-xs"
+									th:href="@{/api/socialweb-tienda/tienda/pedidos/vaciarcesta/producto/} + ${item.producto.id}"
+									th:text="eliminar"
+									onclick="confirm('Desea eliminar el registro?')"> </a></td>
+							</tr>
+						</tbody>
+					</table>
+
+					<div class="row float-right">
+
+						<label for="total_importe"
+							class="col-form-label badge badge-secondary my-2">TOTAL :
+						</label> <input type="text" name="total_importe" id="total_importe"
+							readonly class="form-control" th:value="${'0'}">
+
+					</div>
+
+					<div>
+						<input type="submit" value="enviar" class="btn btn-primary">
+					</div>
+
+				</form>
+
+			</div>
+		</div>
+	</div>
+
+	<footer th:replace="componentes/layout :: footer"></footer>
+	<script
+		th:replace="componentes/js/calcular-total-productos :: calcular-total-productos"></script>
+
+</body>
+</html>

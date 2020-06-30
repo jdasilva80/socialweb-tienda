@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="componentes/layout :: head"></head>
+
+<body>
+
+	<header th:replace="componentes/layout :: header"></header>
+		
+	<div class="container py-4">	
+	
+		<div class="row my-2">
+			<label for="buscar_producto" class="col-form-label col-sm-2" th:text="'Buscar producto'"></label>
+			<div class="col-sm-6">
+				<input type="text" name="buscar_producto" id="buscar_producto" class="form-control">
+			</div>
+		</div>
+
+		<div class="card bg-light">
+		
+			<div>
+				<a th:href="@{'/api/socialweb-tienda/tienda/productos/lista' (format=xml)}" class="btn btn-primary btn-xs col-sm-1  my-1 mx-1 float-right">XML</a>
+				<a th:href="@{'/api/socialweb-tienda/tienda/productos/lista' (format=json)}" class="btn btn-warning btn-xs col-sm-1  my-1 mx-1 float-right">JSON</a>
+			</div>
+			
+			<div class="card-header" th:text="${titulo}"></div>
+						
+			<div class="card-body">
+								
+				<table th:replace="componentes/plantilla-productos :: productosLista"></table>
+				
+				<table class="table table-sm table-striped table-hover" id="cargarProductosLista">
+		
+					<thead>
+						<th style="width: 20%" th:text="#{text.producto.foto}">FOTO</th>
+						<th style="width: 20%" th:text="#{text.producto.nombre}">NOMBRE</th>
+						<th style="width: 20%" th:text="#{text.producto.precio}">PRECIO</th>
+						<th style="width: 20%"></th>
+					</thead>
+		
+					<tbody></tbody>
+				</table>
+				<!--
+				<table class="table table-sm table-striped table-hover" th:if="${productos!=null}">
+		
+					<thead>
+						<th style="width: 20%">ID</th>
+						<th style="width: 20%">FOTO</th>
+						<th style="width: 20%">NOMBRE</th>
+						<th style="width: 20%">PRECIO</th>
+						<th style="width: 20%"></th>
+					</thead>
+		
+					<tbody>
+						<tr th:each="producto : ${productos}">
+							<td th:text="${#strings.abbreviate(producto.id,10)}"></td>
+							<td>								
+								<img th:alt="${producto.foto}" th:src="@{'/api/socialweb-tienda/tienda/productos/uploads/' + ${producto.foto}}"											
+										style="max-width: 50%; max-height: 50%" class="img-thumbnail rounded">								
+							</td>
+							<td th:text="${producto.nombre}"></td>
+							<td th:text="${producto.precio}"></td>
+							<td>
+								<a class="btn btn-primary btn-xs" th:href="@{/api/socialweb-tienda/tienda/pedidos/comprar/} + ${producto.id}" th:text="comprar"> </a>
+							</td>							
+						</tr>
+					</tbody>
+				</table>
+				-->
+			</div>
+		</div>
+	</div>
+	
+	<footer th:replace="componentes/layout :: footer"></footer>
+	<script th:replace="componentes/js/autocomplete-productos :: autocomplete-productos"></script>
+	
+</body>
+</html>

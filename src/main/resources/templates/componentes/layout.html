@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head th:fragment="head">
+	<meta charset="UTF-8"/>
+	<title th:text="'Tienda ' + ${titulo}"></title>
+	<link rel="stylesheet"
+		th:href="@{/api/socialweb-tienda/css/bootstrap.min.css}">
+	<link rel="stylesheet"
+		th:href="@{/api/socialweb-tienda/css/jquery-ui.min.css}">
+</head>
+<body>
+	
+	<header th:fragment="header">
+	
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		  <a class="navbar-brand" href="#">Tienda</a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		    <span class="navbar-toggler-icon"></span>
+		  </button>
+		  <div class="collapse navbar-collapse" id="navbarNav">
+		    <ul class="navbar-nav">
+		      <li class="nav-item active">
+		        <a class="nav-link" th:href="@{/api/socialweb-tienda/tienda}">Home <span class="sr-only">(current)</span></a>
+		      </li>
+		      <li class="nav-item">
+		        <a class="nav-link" th:href="@{/api/socialweb-tienda/tienda/pedidos}">pedidos</a>
+		      </li>
+		    </ul>
+		  </div> 
+		  
+		  <ul class="navbar-nav navbar-right mx-4">
+		  				 
+			  	<li class="nav-item mx-1">
+				  	<a th:href="@{/api/socialweb-tienda/tienda/pedidos/cesta/usuario}">				
+					 	<img th:alt="${'cesta de la compra'}" th:src="@{/api/socialweb-tienda/img/tienda.png}" width="8%" height="8%" class="img-thumbnail rounded float-right"></img>
+				  	</a>
+				</li>
+				<li class="nav-item mx-1">
+			  		<a th:href="@{/api/socialweb-tienda/tienda/pedidos/vaciarcesta}" class="btn btn-outline-success" >Vaciar papelera</a>
+			  	</li>	  
+				<li class="nav-item mx-1"><a class="btn btn-outline-success"
+					th:href="@{/api/socialweb-tienda/tienda/locale(lang=es_ES)}">ES</a></li>
+				<li class="nav-item mx-1"><a class="btn btn-outline-success"
+					th:href="@{/api/socialweb-tienda/tienda/locale(lang=en_US)}">EN</a></li>
+				<li class="nav-item mx-1"><a class="btn btn-outline-success"
+					th:href="@{/api/socialweb-tienda/tienda/locale(lang=ca_CA)}">CA</a></li>
+					
+				<li class="nav-item dropdown show mx-2">
+					<a class="btn btn-outline-primary dropdown-toggle" href="#" role="button" id="dropdownLenguaje" 
+						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<span th:text="#{text.locale.language}"></span>
+					</a>
+
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+						<a class="dropdown-item" th:href="@{/api/socialweb-tienda/tienda/locale(lang=es_ES)}" th:text="#{text.locale.es}">ES</a> 
+						<a class="dropdown-item" th:href="@{/api/socialweb-tienda/tienda/locale(lang=en_US)}" th:text="#{text.locale.en}">EN</a>
+						<a class="dropdown-item" th:href="@{/api/socialweb-tienda/tienda/locale(lang=ca_CA)}" th:text="#{text.locale.ca}">CA</a>
+					</div>
+				</li>
+				
+		  </ul>
+		  
+		  
+		</nav>
+		
+		<ul class="alert alert-info" th:if="${mensaje != null && mensaje.info != null && !mensaje.info.isEmpty()} " >
+			<li th:each="info : ${mensaje.info}" th:text="${info}"></li>
+		</ul>
+		<ul class="alert alert-success" th:if="${mensaje != null && mensaje.success != null && !mensaje.success.isEmpty()} " >
+			<li th:each="success : ${mensaje.success}" th:text="${success}"></li>
+		</ul>
+		<ul class="alert alert-warning" th:if="${mensaje != null && mensaje.warning != null && !mensaje.warning.isEmpty()} " >
+			<li th:each="warning : ${mensaje.warning}" th:text="${warning}"></li>
+		</ul>
+		<ul class="alert alert-danger" th:if="${mensaje != null && mensaje.danger != null && !mensaje.danger.isEmpty()} " >
+			<li th:each="danger : ${mensaje.danger}" th:text="${danger}"></li>
+		</ul>
+		<!-- --------------------------------------------- -->
+		<!-- para mensajes flash (despues de un redirect)  -->
+		<!-- --------------------------------------------- -->	
+		<ul class="alert alert-info" th:if="${mensajeFlash != null && mensajeFlash.info != null && !mensajeFlash.info.isEmpty()} " >
+			<li th:each="info : ${mensajeFlash.info}" th:text="${info}"></li>
+		</ul>
+		<ul class="alert alert-success" th:if="${mensajeFlash != null && mensajeFlash.success != null && !mensajeFlash.success.isEmpty()} " >
+			<li th:each="success : ${mensajeFlash.success}" th:text="${success}"></li>
+		</ul>
+		<ul class="alert alert-warning" th:if="${mensajeFlash != null && mensajeFlash.warning != null && !mensajeFlash.warning.isEmpty()} " >
+			<li th:each="warning : ${mensajeFlash.warning}" th:text="${warning}"></li>
+		</ul>
+		<ul class="alert alert-danger" th:if="${mensajeFlash != null && mensajeFlash.danger != null && !mensajeFlash.danger.isEmpty()} " >
+			<li th:each="danger : ${mensajeFlash.danger}" th:text="${danger}"></li>
+		</ul>
+		
+	</header>
+	
+	<div class="container">
+	
+	</div>
+		
+	<footer th:fragment="footer" class="container">
+		
+		<img th:src="@{/api/socialweb-tienda/img/tienda.png}" width="10%" height="10%"></img>
+		
+		<p>Este proyecto fue desarrollado por José Manuel Da Silva</p>
+		
+		<script th:src="@{/api/socialweb-tienda/js/jquery-3.4.1.min.js}"></script>
+		<script th:src="@{/api/socialweb-tienda/js/popper.min.js}"></script>
+		<script th:src="@{/api/socialweb-tienda/js/bootstrap.min.js}"></script>
+		<script th:src="@{/api/socialweb-tienda/js/jquery-ui.min.js}"></script>		
+	
+	</footer>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http:wwww.thymeleaf.org">
+
+<body>
+
+<script type="text/javascript" th:fragment="calcular-total-productos" >
+
+
+	$(document).ready(function() {
+		
+		itemsHelper.calcularTotal();
+	
+		
+		$("form").submit(function(){
+			
+			//alert('submit');
+		});
+		
+	});
+
+	var itemsHelper = {
+	
+		calcularTotal: function(){
+			
+			var total = 0;
+			
+			$('input[name^="producto_id"]').each(function(index, element) { 
+		       
+		        var idCantidadItem = 'cantidad_' + $(element).val();
+		        var idPrecioItem = 'precio_' + $(element).val();
+		        
+		        total += $('input[id="' + idCantidadItem + '"]').val() * $('td[id="' + idPrecioItem +'"]').text();
+		        
+		    });
+			
+			total = Math.round(total * 100) / 100
+			
+			$('#total_importe').val(total);
+		},
+		
+		guardarCantidad: function(elemento){
+			
+			$.ajax({
+		        url:  "/api/socialweb-tienda/tienda/productos/"+elemento.id.replace('cantidad_','')+"/cantidad/"+elemento.value,
+		        type: 'get',
+		        dataType : "json",
+		        success: function(data){
+		        	return;
+		        },
+		        error: function (xhr, ajaxOptions, thrownError) {
+		            var errorMsg = 'Ajax request failed: ' + xhr.responseText;
+		            $('#id_errores').html(errorMsg);
+		          }
+		    });
+		}
+	}
+
+</script>
+
+</body>
+</html>
