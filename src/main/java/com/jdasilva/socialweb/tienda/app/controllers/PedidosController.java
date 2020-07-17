@@ -8,6 +8,7 @@ import java.util.Locale;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -25,10 +26,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.jdasilva.socialweb.commons.models.document.Producto;
 import com.jdasilva.socialweb.commons.models.entity.Mensaje;
 import com.jdasilva.socialweb.commons.models.entity.Usuario;
-import com.jdasilva.socialweb.tienda.app.clientrest.ProductosClienteRestFeign;
-import com.jdasilva.socialweb.tienda.app.clientrest.UsuariosClienteRestFeign;
+import com.jdasilva.socialweb.tienda.app.domain.service.IUsuarioService;
+//import com.jdasilva.socialweb.tienda.app.clientrest.ProductosClienteRestFeign;
+//import com.jdasilva.socialweb.tienda.app.clientrest.UsuariosClienteRestFeign;
 import com.jdasilva.socialweb.tienda.app.domain.model.ItemPedido;
 import com.jdasilva.socialweb.tienda.app.domain.model.Pedido;
+import com.jdasilva.socialweb.tienda.app.domain.service.IProductoService;
 import com.jdasilva.socialweb.tienda.app.domain.service.IUploadService;
 import com.jdasilva.socialweb.tienda.app.domain.service.PedidoService;
 
@@ -40,11 +43,17 @@ public class PedidosController {
 	@Autowired
 	PedidoService pedidoService;
 
+//	@Autowired
+//	ProductosClienteRestFeign productosClient;
 	@Autowired
-	ProductosClienteRestFeign productosClient;
+	@Qualifier("productoRestServiceTienda")
+	private IProductoService productoService;
 
+//	@Autowired
+//	UsuariosClienteRestFeign usuariosClient;
 	@Autowired
-	UsuariosClienteRestFeign usuariosClient;
+	@Qualifier("usuarioRestServiceTienda")
+	private IUsuarioService usuarioService;
 
 	@Autowired
 	IUploadService uploadService;
@@ -67,7 +76,7 @@ public class PedidosController {
 	@GetMapping({ "/usuario/username/{username}" })
 	public String pedidosUsuario(@PathVariable String username, Model model) {
 
-		Usuario usuario = usuariosClient.findByUserName(username);
+		Usuario usuario = usuarioService.findByUsername(username);
 
 		model.addAttribute("titulo", "pedidos");
 		model.addAttribute("pedidos", pedidoService.findByUsuario(usuario));
@@ -111,7 +120,7 @@ public class PedidosController {
 	@GetMapping({ "/usuario/username/{username}/pedido/{id}" })
 	public String usuarioProductos(@PathVariable String username, @PathVariable String id, Model model) {
 
-		Usuario usuario = usuariosClient.findByUserName(username);
+		Usuario usuario = usuarioService.findByUsername(username);
 
 		if (usuario != null) {
 
@@ -130,11 +139,11 @@ public class PedidosController {
 	public String usuarioProductos(@PathVariable String productoId, Model model,
 			@SessionAttribute(name = "cesta", required = false) Pedido cesta, Locale locale) {
 
-		Producto producto = productosClient.findById(productoId);
+		Producto producto = productoService.findById(productoId);
 
 		if (cesta == null) {
 
-			Usuario usuario = usuariosClient.findByUserName("jdasilva1980");
+			Usuario usuario = usuarioService.findByUsername("jdasilva1980");
 			cesta = new Pedido();
 			cesta.setUsuario(usuario);
 			model.addAttribute("cesta", cesta);
@@ -210,7 +219,7 @@ public class PedidosController {
 	public String vaciarCestaProducto(@PathVariable String productoId, @SessionAttribute(name = "cesta") Pedido pedido,
 			Model model, SessionStatus sessionStatus, Locale locale) {
 
-		Producto producto = productosClient.findById(productoId);
+		Producto producto = productoService.findById(productoId);
 
 		if (producto != null) {
 
@@ -242,7 +251,7 @@ public class PedidosController {
 			model.addAttribute("cesta", cesta);
 		}
 
-		Usuario usuario = usuariosClient.findByUserName("jdasilva1980");
+		Usuario usuario = usuarioService.findByUsername("jdasilva1980");
 
 		if (usuario == null) {
 
@@ -265,7 +274,7 @@ public class PedidosController {
 			@RequestParam(name = "cantidad[]", required = false) Integer[] cantidades, RedirectAttributes flash,
 			SessionStatus status) {
 
-		Usuario usuario = usuariosClient.findByUserName("jdasilva1980");
+		Usuario usuario = usuarioService.findByUsername("jdasilva1980");
 
 		if (usuario != null) {
 
@@ -285,7 +294,7 @@ public class PedidosController {
 				if (itemPedido == null) {
 
 					ItemPedido item = new ItemPedido();
-					Producto producto = productosClient.findById(id);
+					Producto producto = productoService.findById(id);
 					item.setProducto(producto);
 					int posicion = Arrays.asList(productosId).indexOf(id);
 					item.setCantidad(cantidades[posicion]);

@@ -3,28 +3,37 @@ package com.jdasilva.socialweb.tienda.app.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.jdasilva.socialweb.commons.models.document.Producto;
-import com.jdasilva.socialweb.tienda.app.clientrest.ProductosClienteRestFeign;
-import com.jdasilva.socialweb.tienda.app.clientrest.UsuariosClienteRestFeign;
+//import com.jdasilva.socialweb.tienda.app.clientrest.ProductosClienteRestFeign;
+import com.jdasilva.socialweb.tienda.app.domain.service.IProductoService;
+//import com.jdasilva.socialweb.tienda.app.clientrest.UsuariosClienteRestFeign;
+import com.jdasilva.socialweb.tienda.app.domain.service.IUsuarioService;
 import com.jdasilva.socialweb.tienda.app.domain.service.PedidoService;
 
 @Controller
 @RequestMapping("/tienda")
 public class TiendaController {
 
+//	@Autowired
+//	ProductosClienteRestFeign productosClient;
 	@Autowired
-	ProductosClienteRestFeign productosClient;
+	@Qualifier("productoRestServiceTienda")
+	private IProductoService productoService;
 
 	@Autowired
 	PedidoService pedidoService;
 
+//	@Autowired
+//	UsuariosClienteRestFeign usuariosClient;
 	@Autowired
-	UsuariosClienteRestFeign usuariosClient;
+	@Qualifier("usuarioRestServiceTienda")
+	private IUsuarioService usuarioService;
 
 	@GetMapping({ "/", "" })
 	public String home(Model model) {
@@ -38,12 +47,12 @@ public class TiendaController {
 
 		model.addAttribute("titulo", "productos");
 		
-		List<Producto> productos =productosClient.findAll();
+		List<Producto> productos =productoService.findAll();
 		
 		if(productos.size()>0) {
 
-			Producto[] productosArray = new Producto[productosClient.findAll().size()];
-			productosArray = productosClient.findAll().toArray(productosArray);			
+			Producto[] productosArray = new Producto[productoService.findAll().size()];
+			productosArray = productoService.findAll().toArray(productosArray);			
 			model.addAttribute("productos", productosArray);
 		}
 		

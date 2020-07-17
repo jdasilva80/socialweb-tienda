@@ -1,10 +1,13 @@
 package com.jdasilva.socialweb.tienda.app;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,17 +18,24 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import com.jdasilva.socialweb.commons.interceptors.FlashAttributesInterceptor;
 import com.jdasilva.socialweb.commons.models.document.Producto;
-import com.jdasilva.socialweb.tienda.app.clientrest.ProductosClienteRestFeign;
-import com.jdasilva.socialweb.tienda.app.clientrest.UsuariosClienteRestFeign;
+import com.jdasilva.socialweb.commons.models.entity.Usuario;
+//import com.jdasilva.socialweb.tienda.app.clientrest.ProductosClienteRestFeign;
+//import com.jdasilva.socialweb.tienda.app.clientrest.UsuariosClienteRestFeign;
 import com.jdasilva.socialweb.tienda.app.domain.model.ItemPedido;
 import com.jdasilva.socialweb.tienda.app.domain.model.Pedido;
+import com.jdasilva.socialweb.tienda.app.domain.service.IProductoService;
+import com.jdasilva.socialweb.tienda.app.domain.service.IUsuarioService;
 import com.jdasilva.socialweb.tienda.app.domain.service.ItemPedidoService;
 import com.jdasilva.socialweb.tienda.app.domain.service.PedidoService;
 
@@ -46,11 +56,17 @@ public class SocialwebTiendaApplication implements CommandLineRunner {
 	@Autowired
 	private ItemPedidoService itemPedidoService;
 
+//	@Autowired
+//	ProductosClienteRestFeign productosClient;
 	@Autowired
-	ProductosClienteRestFeign productosClient;
+	@Qualifier("productoRestServiceTienda")
+	private IProductoService productoService;
 
+//	@Autowired
+//	UsuariosClienteRestFeign usuariosClient;	
 	@Autowired
-	UsuariosClienteRestFeign usuariosClient;
+	@Qualifier("usuarioRestServiceTienda")
+	private IUsuarioService usuarioService;
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
@@ -67,28 +83,28 @@ public class SocialwebTiendaApplication implements CommandLineRunner {
 		mongoTemplate.createCollection(Pedido.class);
 		mongoTemplate.createCollection(ItemPedido.class);
 
-		List<LinkedHashMap<String, ?>> usuarios = (List<LinkedHashMap<String, ?>>) usuariosClient.findAll()
+		List<LinkedHashMap<String, ?>> usuarios = (List<LinkedHashMap<String, ?>>) usuarioService.findAll()
 				.get("_embedded").get("usuarios");
 
-		List<Producto> productos = productosClient.findAll();
+		List<Producto> productos = productoService.findAll();
 
 		usuarios.forEach(
 
 				(element) -> {
-					Pedido pedido = new Pedido();
-					pedido.setUsuario(
-							usuariosClient.findByUserName((String) ((LinkedHashMap<?, ?>) element).get("username")));
-
-					productos.forEach((p) -> {
-
-						ItemPedido item = new ItemPedido();
-						item.setCantidad(2);
-						item.setProducto(p);
-						itemPedidoService.insert(item);
-						pedido.addItem(item);
-
-					});
-					pedidoService.insert(pedido);
+//					Pedido pedido = new Pedido();
+//					pedido.setUsuario(
+//							usuarioService.findByUsername((String) ((LinkedHashMap<?, ?>) element).get("username")));
+//
+//					productos.forEach((p) -> {
+//
+//						ItemPedido item = new ItemPedido();
+//						item.setCantidad(2);
+//						item.setProducto(p);
+//						itemPedidoService.insert(item);
+//						pedido.addItem(item);
+//
+//					});
+//					pedidoService.insert(pedido);
 				});
 	}
 
@@ -119,6 +135,24 @@ public class SocialwebTiendaApplication implements CommandLineRunner {
 		// ProductosList -> clase envoltorio, ya que no se puede hacer marshelling de
 		// Collections(list,set,..) directamente con jaxb (con json no es necesario, es directo)
 		return jaxb2Marshaller;
+	}
+	
+	@Bean
+	// @LoadBalanced para usar ribbon con restamplate
+	public RestTemplate restTemplate() {
+
+		RestTemplate restTemplate = new RestTemplate();
+		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+		// Add the Jackson Message converter
+		MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+
+		// Note: here we are making this converter to process any kind of response,
+		// not only application/*json, which is the default behaviour
+		converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
+		messageConverters.add(converter);
+		restTemplate.setMessageConverters(messageConverters);
+
+		return restTemplate;
 	}
 
 //	
