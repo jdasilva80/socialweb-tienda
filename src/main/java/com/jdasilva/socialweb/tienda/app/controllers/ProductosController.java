@@ -81,8 +81,9 @@ public class ProductosController {
 
 		if (recurso != null) {
 
-			return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG)
-					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"".concat(filename)).body(recurso);
+			return ResponseEntity.ok()
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"".concat(filename))
+					.header(HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8").body(recurso);
 		} else {
 
 			return ResponseEntity.noContent().build();
