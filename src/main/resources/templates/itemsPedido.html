@@ -48,8 +48,12 @@
 					<tbody>
 						<tr th:each="item : ${pedido.items}">
 							<td th:text="${#strings.abbreviate(item.producto.id,10)}"></td>
-							<td>
+							<!--<td>
 								<img th:alt="${item.producto.foto}" th:src="@{'/api/socialweb-tienda/tienda/productos/uploads/' + ${item.producto.foto}}"											
+										style="max-width: 50%; max-height: 50%" class="img-thumbnail rounded">
+							</td>-->
+							<td>
+								<img th:alt="${item.producto.foto}" th:src="@{'https://soyjose-productos.herokuapp.com/apirest/productos/uploads/' + ${item.producto.foto}}"											
 										style="max-width: 50%; max-height: 50%" class="img-thumbnail rounded">
 							</td>
 							<td th:text="${item.producto.nombre}"></td>
