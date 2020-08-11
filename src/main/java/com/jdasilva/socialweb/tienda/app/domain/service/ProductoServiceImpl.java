@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,10 +47,10 @@ public class ProductoServiceImpl implements IProductoService {
 		Map<String, String> pathVariables = new HashMap<>();
 		pathVariables.put("filename", filename);
 
-		ResponseEntity<Resource> response = clienteRest
-				.exchange("https://soyjose-productos.herokuapp.com/apirest/productos/uploads/{filename}", 
-						HttpMethod.GET, null, Resource.class, pathVariables);
-		
+		ResponseEntity<Resource> response = clienteRest.getForObject(
+				"https://soyjose-productos.herokuapp.com/apirest/productos/uploads/{filename}", ResponseEntity.class,
+				pathVariables);
+
 		return response;
 	}
 

@@ -83,7 +83,7 @@ public class ProductosController {
 
 			return ResponseEntity.ok()
 					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"".concat(filename))
-					.header(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_JPEG_VALUE).body(recurso);
+					.body(recurso);
 		} else {
 
 			return ResponseEntity.noContent().build();
