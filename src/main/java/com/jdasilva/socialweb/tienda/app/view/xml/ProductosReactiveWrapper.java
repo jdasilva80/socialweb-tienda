@@ -3,19 +3,19 @@ package com.jdasilva.socialweb.tienda.app.view.xml;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.jdasilva.socialweb.commons.models.productos.entity.Producto;
+import com.jdasilva.socialweb.commons.models.document.Producto;
 
 @XmlRootElement(name = "productos")
-public class ProductosWrapper {
+public class ProductosReactiveWrapper {
 
 	@XmlElement(name = "producto")
 	private Producto[] productos;
 
-	public ProductosWrapper() {
+	public ProductosReactiveWrapper() {
 
 	}
 	
-	public ProductosWrapper(Producto[] productos) {
+	public ProductosReactiveWrapper(Producto[] productos) {
 		this.productos = productos;
 	}
 

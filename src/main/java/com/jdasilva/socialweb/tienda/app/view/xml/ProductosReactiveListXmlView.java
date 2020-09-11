@@ -10,13 +10,13 @@ import org.springframework.oxm.Marshaller;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.xml.MarshallingView;
 
-import com.jdasilva.socialweb.commons.models.productos.entity.Producto;
+import com.jdasilva.socialweb.commons.models.document.Producto;
 
-@Component("home.xml")
-public class ProductosListXmlView extends MarshallingView {
+@Component("homeReactive.xml")
+public class ProductosReactiveListXmlView extends MarshallingView {
 
 	@Autowired
-	public ProductosListXmlView(Marshaller marshaller) {
+	public ProductosReactiveListXmlView(Marshaller marshaller) {
 		super(marshaller);
 	}
 
@@ -29,7 +29,7 @@ public class ProductosListXmlView extends MarshallingView {
 		model.remove("productos");
 		model.remove("mensajeFlash");
 
-		ProductosWrapper productosList = new ProductosWrapper(productos);
+		ProductosReactiveWrapper productosList = new ProductosReactiveWrapper(productos);
 		model.put("productosList", productosList);
 
 		super.renderMergedOutputModel(model, request, response);

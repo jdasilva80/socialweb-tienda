@@ -23,31 +23,30 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.jdasilva.socialweb.commons.models.productos.entity.Producto;
+import com.jdasilva.socialweb.commons.models.document.Producto;
 import com.jdasilva.socialweb.commons.models.usuarios.entity.Mensaje;
 import com.jdasilva.socialweb.commons.models.usuarios.entity.Usuario;
 import com.jdasilva.socialweb.tienda.app.domain.service.IUsuarioService;
-import com.jdasilva.socialweb.tienda.app.domain.relational.model.ItemPedido;
-import com.jdasilva.socialweb.tienda.app.domain.relational.model.Pedido;
-import com.jdasilva.socialweb.tienda.app.domain.service.IProductoService;
+import com.jdasilva.socialweb.tienda.app.domain.document.model.ItemPedido;
+import com.jdasilva.socialweb.tienda.app.domain.document.model.Pedido;
+import com.jdasilva.socialweb.tienda.app.domain.service.IProductoReactiveService;
 import com.jdasilva.socialweb.tienda.app.domain.service.IUploadService;
-import com.jdasilva.socialweb.tienda.app.domain.service.PedidoService;
+import com.jdasilva.socialweb.tienda.app.domain.service.PedidoReactiveService;
 
 @Controller
-@RequestMapping("/tienda/pedidos")
+@RequestMapping("/reactive/tienda/pedidos")
 @SessionAttributes("cesta")
-public class PedidosController {
+public class PedidosReactiveController {
+
+	@Autowired
+	PedidoReactiveService pedidoService;
+
+	@Autowired
+//	@Qualifier("productoReactiveRestServiceTienda")
+	@Qualifier("productoReactiveFeignServiceTienda")
+	private IProductoReactiveService productoService;
 
 //	@Autowired
-//	PedidoMongoService pedidoService;
-	@Autowired
-	PedidoService pedidoService;
-
-	@Autowired
-//	@Qualifier("productoRestServiceTienda")
-	@Qualifier("productoFeignServiceTienda")
-	private IProductoService productoService;
-
 	@Autowired
 //	@Qualifier("usuarioRestServiceTienda")
 	@Qualifier("usuarioFeingService")	
@@ -66,25 +65,9 @@ public class PedidosController {
 	public String pedidos(Model model) {
 
 		model.addAttribute("titulo", "pedidos");
-		
-		List<Pedido>  pedidos = pedidoService.findAll();
-		
-		pedidos.stream().forEach((p) -> { 
-			
-			Usuario usuario = usuarioService.findById(p.getUsuario_id());
-			p.setUsuario(usuario);
-			
-			p.getItems().stream().forEach((i) -> {
-				Producto producto = productoService.findById(i.getProductoId());
-				i.setProducto(producto);
-			});
-		
-		});
-		
-		
-		model.addAttribute("pedidos", pedidos);
+		model.addAttribute("pedidos", pedidoService.findAll());
 
-		return "pedidosLista";
+		return "pedidosListaReactive";
 	}
 
 	@GetMapping({ "/usuario/username/{username}" })
@@ -93,77 +76,46 @@ public class PedidosController {
 		Usuario usuario = usuarioService.findByUsername(username);
 
 		model.addAttribute("titulo", "pedidos");
-		List<Pedido>  pedidos = pedidoService.findByUsuario(usuario);
-		
-		pedidos.stream().forEach(p -> {
-			p.setUsuario(usuario);
-			p.getItems().stream().forEach((i) -> {
-				Producto producto = productoService.findById(i.getProductoId());
-				i.setProducto(producto);
-			});
-		});
-		 
-		model.addAttribute("pedidos", pedidos);
+		model.addAttribute("pedidos", pedidoService.findByUsuario(usuario));
 
-		return "pedidosLista";
+		return "pedidosListaReactive";
 	}
 
 	@GetMapping({ "/{id}" })
-	public String getPedido(@PathVariable @NotNull Long id, Model model) {
+	public String getPedido(@PathVariable @NotNull String id, Model model) {
 
 		Pedido pedido = pedidoService.findById(id).orElse(null);
 
 		if (pedido != null) {
-			
-			Usuario usuario = usuarioService.findById(id);
-			pedido.setUsuario(usuario);
-			
-			pedido.getItems().stream().forEach((i) -> {
-				Producto producto = productoService.findById(i.getProductoId());
-				i.setProducto(producto);
-			});
-			
 			model.addAttribute("pedido", pedido);
 			model.addAttribute("titulo", "pedido " + pedido.getId());
 		}
 
-		return "itemsPedido";
+		return "itemsPedidoReactive";
 	}
 
 	@GetMapping({ "/eliminar/{id}" })
-	public String eliminarPedido(@PathVariable @NotNull Long id, Model model) {
+	public String eliminarPedido(@PathVariable @NotNull String id, Model model) {
 
 		Pedido pedido = pedidoService.findById(id).orElse(null);
 
 		if (pedido != null) {
 
 			pedidoService.delete(pedido);
-			List<Pedido>  pedidos = pedidoService.findAll();
-			
-			pedidos.stream().forEach((p) -> { 
-				
-				Usuario usuario = usuarioService.findById(p.getUsuario_id());
-				p.setUsuario(usuario);
-				
-				p.getItems().stream().forEach((i) -> {
-					Producto producto = productoService.findById(i.getProductoId());
-					i.setProducto(producto);
-				});
-			
-			});
-			model.addAttribute("pedidos", pedidos);
+			model.addAttribute("pedidos", pedidoService.findAll());
+
 			Mensaje mensaje = new Mensaje();
 			List<String> danger = new ArrayList<>();
-			danger.add("se ha eliminado el pedido ".concat(pedido.getId().toString()));
+			danger.add("se ha eliminado el pedido ".concat(pedido.getId()));
 			mensaje.setDanger(danger);
 			model.addAttribute("mensaje", mensaje);
 		}
 
-		return "pedidosLista";
+		return "pedidosListaReactive";
 	}
 
 	@GetMapping({ "/usuario/username/{username}/pedido/{id}" })
-	public String usuarioProductos(@PathVariable String username, @PathVariable Long id, Model model) {
+	public String usuarioProductos(@PathVariable String username, @PathVariable String id, Model model) {
 
 		Usuario usuario = usuarioService.findByUsername(username);
 
@@ -173,40 +125,33 @@ public class PedidosController {
 					.findFirst().orElse(null);
 
 			if (pedido != null) {
-				
-				pedido.setUsuario(usuario);
-				
-				pedido.getItems().stream().forEach((i) -> {
-					Producto producto = productoService.findById(i.getProductoId());
-					i.setProducto(producto);
-				});
 				model.addAttribute("pedido", pedido);
 
 			}
 		}
-		return "itemsPedido";
+		return "itemsPedidoReactive";
 	}
 
 	@GetMapping({ "/comprar/{productoId}" })
-	public String usuarioProductos(@PathVariable Long productoId, Model model,
+	public String usuarioProductos(@PathVariable String productoId, Model model,
 			@SessionAttribute(name = "cesta", required = false) Pedido cesta, Locale locale) {
+
+		Producto producto = productoService.findById(productoId);
 
 		if (cesta == null) {
 
 			Usuario usuario = usuarioService.findByUsername("jdasilva1980");
 			cesta = new Pedido();
-			cesta.setUsuario_id(usuario.getId(), usuario);
+			cesta.setUsuario(usuario);
 			model.addAttribute("cesta", cesta);
 		}
 
 		ItemPedido itemPedido = cesta.getItems().stream()
-				.filter((item) -> item.getProductoId().equals(productoId)).findFirst().orElse(new ItemPedido());
-
+				.filter((item) -> item.getProducto().getId().equals(productoId)).findFirst().orElse(new ItemPedido());
 
 		if (itemPedido.getProducto() == null) {
 
-			Producto prod = productoService.findById(productoId);
-			itemPedido.setProductoId(prod.getId(), prod);
+			itemPedido.setProducto(producto);
 			itemPedido.setCantidad(1);
 			cesta.addItem(itemPedido);
 
@@ -218,11 +163,11 @@ public class PedidosController {
 
 		Mensaje mensaje = new Mensaje();
 		List<String> info = new ArrayList<>();
-		info.add("se ha añadido el producto ".concat(itemPedido.getProducto().getNombre()));
+		info.add("se ha añadido el producto ".concat(producto.getNombre()));
 		mensaje.setInfo(info);
 		model.addAttribute("mensaje", mensaje);
 
-		return "cesta";
+		return "cestaReactive";
 	}
 
 	@GetMapping({ "/vaciarcesta" })
@@ -231,19 +176,19 @@ public class PedidosController {
 
 		if (pedido != null) {
 
-			pedido.getItems().removeIf((item) -> item.getProductoId() != null);
+			pedido.getItems().removeIf((item) -> item.getProducto() != null);
 
 			sessionStatus.setComplete();
 		}
 
 		model.addAttribute("titulo", messages.getMessage("text.cesta.titulo", null, "Cesta", locale));
 
-		return "cesta";
+		return "cestaReactive";
 
 	}
 
 	@GetMapping({ "/{id}/eliminar/item/{idItem}" })
-	public String eliminarItemPedido(@PathVariable Long id, @PathVariable Long idItem, Model model) {
+	public String eliminarItemPedido(@PathVariable String id, @PathVariable String idItem, Model model) {
 
 		Pedido pedido = pedidoService.findById(id).orElse(null);
 
@@ -255,34 +200,27 @@ public class PedidosController {
 			if (item != null) {
 
 				pedido.getItems().remove(item);
-				pedidoService.save(pedido);
-				
-				Usuario usuario = usuarioService.findById(pedido.getUsuario_id());
-				pedido.setUsuario(usuario);
-				
-				pedido.getItems().stream().forEach((i) -> {
-					Producto producto = productoService.findById(i.getProductoId());
-					i.setProducto(producto);
-				});
-				model.addAttribute("pedido", pedido);
-				model.addAttribute("titulo", "item eliminado ".concat(item.getId().toString()));
+				pedidoService.insert(pedido);
+				model.addAttribute("titulo", "item eliminado ".concat(item.getId()));
 
 			}
+
 			model.addAttribute("pedido", pedido);
 		}
 
-		return "itemsPedido";
+		return "itemsPedidoReactive";
+
 	}
 
 	@GetMapping({ "/vaciarcesta/producto/{productoId}" })
-	public String vaciarCestaProducto(@PathVariable Long productoId, @SessionAttribute(name = "cesta") Pedido pedido,
+	public String vaciarCestaProducto(@PathVariable String productoId, @SessionAttribute(name = "cesta") Pedido pedido,
 			Model model, SessionStatus sessionStatus, Locale locale) {
 
 		Producto producto = productoService.findById(productoId);
 
 		if (producto != null) {
 
-			pedido.getItems().removeIf((item) -> item.getProductoId().equals(productoId));
+			pedido.getItems().removeIf((item) -> item.getProducto().getId().equals(productoId));
 
 			Mensaje mensaje = new Mensaje();
 			List<String> danger = new ArrayList<>();
@@ -297,7 +235,8 @@ public class PedidosController {
 		}
 		model.addAttribute("titulo", messages.getMessage("text.cesta.titulo", null, "Cesta", locale));
 
-		return "cesta";
+		return "cestaReactive";
+
 	}
 
 	@GetMapping({ "/cesta/usuario" })
@@ -318,18 +257,17 @@ public class PedidosController {
 			danger.add("No existe el usuario ");
 			mensaje.setDanger(danger);
 			model.addAttribute("mensaje", mensaje);
-		}else {
-
-			cesta.setUsuario_id(usuario.getId(), usuario);		
 		}
+
+		cesta.setUsuario(usuario);
 		model.addAttribute("titulo", messages.getMessage("text.cesta.titulo", null, "Cesta", locale));
 
-		return "cesta";
+		return "cestaReactive";
 	}
 
 	@PostMapping("/cesta/form")
 	public String guardarCesta(Pedido cesta,
-			@RequestParam(name = "producto_id[]", required = false) Long[] productosId,
+			@RequestParam(name = "producto_id[]", required = false) String[] productosId,
 			@RequestParam(name = "cantidad[]", required = false) Integer[] cantidades, RedirectAttributes flash,
 			SessionStatus status) {
 
@@ -337,7 +275,7 @@ public class PedidosController {
 
 		if (usuario != null) {
 
-			cesta.setUsuario_id(usuario.getId(),usuario);
+			cesta.setUsuario(usuario);
 		}
 
 		Mensaje mensaje = new Mensaje();
@@ -348,32 +286,31 @@ public class PedidosController {
 			Arrays.asList(productosId).forEach((id) -> {
 
 				ItemPedido itemPedido = cesta.getItems().stream()
-						.filter((item) -> item.getProductoId().equals(id)).findFirst().orElse(null);
+						.filter((item) -> item.getProducto().getId().equals(id)).findFirst().orElse(null);
 
 				if (itemPedido == null) {
 
 					ItemPedido item = new ItemPedido();
-					Producto prod = productoService.findById(id);						
-					item.setProductoId(id, prod);
+					Producto producto = productoService.findById(id);
+					item.setProducto(producto);
 					int posicion = Arrays.asList(productosId).indexOf(id);
 					item.setCantidad(cantidades[posicion]);
-					item.setPedido(cesta);
-					cesta.addItem(item);					
+					cesta.addItem(item);
 				}
 			});
+
+			pedidoService.insert(cesta);
+
+			List<String> info = new ArrayList<>();
+			info.add("se ha enviado el pedido con id " + cesta.getId());
+			mensaje.setInfo(info);
 
 		} else {
 
 			List<String> danger = new ArrayList<>();
 			danger.add("no se ha seleccionado ningun producto");
 			mensaje.setDanger(danger);
-		}		
-
-		pedidoService.save(cesta);
-
-		List<String> info = new ArrayList<>();
-		info.add("se ha enviado el pedido con id " + cesta.getId());
-		mensaje.setInfo(info);
+		}
 
 		status.setComplete();
 

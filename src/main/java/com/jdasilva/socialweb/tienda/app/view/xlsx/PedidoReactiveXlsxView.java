@@ -11,10 +11,10 @@ import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.document.AbstractXlsxView;
 
-import com.jdasilva.socialweb.tienda.app.domain.relational.model.Pedido;
+import com.jdasilva.socialweb.tienda.app.domain.document.model.Pedido;
 
-@Component("itemsPedido.xlsx")
-public class PedidoXlsxView extends AbstractXlsxView {
+@Component("itemsPedidoReactive.xlsx")
+public class PedidoReactiveXlsxView extends AbstractXlsxView {
 
 	@Override
 	protected void buildExcelDocument(Map<String, Object> model, Workbook workbook, HttpServletRequest request,
@@ -28,7 +28,7 @@ public class PedidoXlsxView extends AbstractXlsxView {
 		Sheet sheet = workbook.createSheet();
 		
 		sheet.createRow(0).createCell(0).setCellValue(messages.getMessage("text.xlsx.pedido.titulo"));
-		sheet.createRow(2).createCell(0).setCellValue("Id: ".concat(pedido.getId().toString()));
+		sheet.createRow(2).createCell(0).setCellValue("Id: ".concat(pedido.getId()));
 		sheet.createRow(4).createCell(0).setCellValue("Fecha: ".concat(pedido.getFecha().toString()));
 		sheet.createRow(6).createCell(0).setCellValue("Observación: ".concat(pedido.getObservacion() == null ? "" : pedido.getObservacion()));
 		sheet.createRow(8).createCell(0).setCellValue("Importe total: ".concat(pedido.getTotal().toString()));

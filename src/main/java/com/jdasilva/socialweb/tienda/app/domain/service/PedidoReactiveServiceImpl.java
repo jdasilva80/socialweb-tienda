@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jdasilva.socialweb.commons.models.usuarios.entity.Usuario;
-import com.jdasilva.socialweb.tienda.app.domain.relational.dao.PedidoDao;
-import com.jdasilva.socialweb.tienda.app.domain.relational.model.Pedido;
+import com.jdasilva.socialweb.tienda.app.domain.document.dao.PedidoReactiveDao;
+import com.jdasilva.socialweb.tienda.app.domain.document.model.Pedido;
 
 
 @Service
-public class PedidoServiceImpl implements PedidoService {
+public class PedidoReactiveServiceImpl implements PedidoReactiveService {
 
 	@Autowired
-	PedidoDao pedidoDao;
+	PedidoReactiveDao pedidoDao;
 
 	@Transactional(readOnly = true)
 	@Override
@@ -27,28 +27,29 @@ public class PedidoServiceImpl implements PedidoService {
 
 	@Transactional
 	@Override
-	public Iterable<Pedido> save(Iterable<Pedido> pedidos) {
+	public Iterable<Pedido> insert(Iterable<Pedido> pedidos) {
 
-		return pedidoDao.saveAll(pedidos);
+		return pedidoDao.insert(pedidos);
+
 	}
 
 	@Transactional
 	@Override
-	public Pedido save(Pedido pedido) {
+	public Pedido insert(Pedido pedido) {
 		
-		return pedidoDao.save(pedido);
+		return pedidoDao.insert(pedido);
 	}
 
 	@Transactional(readOnly = true)
 	@Override
 	public List<Pedido> findByUsuario(Usuario usuario) {
 		
-		return pedidoDao.findByUsuarioId(usuario.getId());
+		return pedidoDao.findByUsuario(usuario);
 	}
 
 	@Transactional(readOnly = true)
 	@Override
-	public Optional<Pedido> findById(Long id) {
+	public Optional<Pedido> findById(String id) {
 		
 		return pedidoDao.findById(id);		
 	}

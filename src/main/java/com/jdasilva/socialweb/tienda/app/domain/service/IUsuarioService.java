@@ -3,7 +3,7 @@ package com.jdasilva.socialweb.tienda.app.domain.service;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 
-import com.jdasilva.socialweb.commons.models.entity.Usuario;
+import com.jdasilva.socialweb.commons.models.usuarios.entity.Usuario;
 
 public interface IUsuarioService {
 

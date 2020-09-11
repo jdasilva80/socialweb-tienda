@@ -11,22 +11,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import com.jdasilva.socialweb.commons.models.productos.entity.Producto;
+import com.jdasilva.socialweb.commons.models.document.Producto;
 
-@Service("productoRestServiceTienda")
-public class ProductoServiceImpl implements IProductoService {
+@Service("productoReactiveRestServiceTienda")
+public class ProductoReactiveServiceImpl implements IProductoReactiveService {
 
 	@Autowired
 	RestTemplate clienteRest;
 
 	@Override
 	@Transactional(readOnly = true)
-	public Producto findById(Long id) {
+	public Producto findById(String id) {
 
-		Map<String, Long> pathVariables = new HashMap<>();
+		Map<String, String> pathVariables = new HashMap<>();
 		pathVariables.put("id", id);
 
-		Producto producto = clienteRest.getForObject("https://soyjose-productos.herokuapp.com/apirest/productos/ver/{id}",
+		Producto producto = clienteRest.getForObject("https://soyjose-productos.herokuapp.com/reactive/apirest/productos/ver/{id}",
 				Producto.class, pathVariables);
 
 		return producto;
@@ -36,7 +36,7 @@ public class ProductoServiceImpl implements IProductoService {
 	public List<Producto> findAll() {
 
 		List<Producto> productos = clienteRest
-				.getForObject("https://soyjose-productos.herokuapp.com/apirest/productos/listar-no-flux", List.class);
+				.getForObject("https://soyjose-productos.herokuapp.com/reactive/apirest/productos/listar-no-flux", List.class);
 
 		return productos;
 	}
@@ -48,7 +48,7 @@ public class ProductoServiceImpl implements IProductoService {
 		pathVariables.put("filename", filename);
 
 		ResponseEntity<Resource> response = clienteRest.getForObject(
-				"https://soyjose-productos.herokuapp.com/apirest/productos/uploads/{filename}", ResponseEntity.class,
+				"https://soyjose-productos.herokuapp.com/reactive/apirest/productos/uploads/{filename}", ResponseEntity.class,
 				pathVariables);
 
 		return response;
@@ -61,7 +61,7 @@ public class ProductoServiceImpl implements IProductoService {
 		pathVariables.put("term", term);
 
 		List<Producto> productos = clienteRest.getForObject(
-				"https://soyjose-productos.herokuapp.com/apirest/productos/nombre/{term}", List.class, pathVariables);
+				"https://soyjose-productos.herokuapp.com/reactive/apirest/productos/nombre/{term}", List.class, pathVariables);
 
 		return productos;
 	}

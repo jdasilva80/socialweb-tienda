@@ -6,14 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jdasilva.socialweb.tienda.app.domain.relational.dao.ItemPedidoDao;
-import com.jdasilva.socialweb.tienda.app.domain.relational.model.ItemPedido;
+import com.jdasilva.socialweb.tienda.app.domain.document.dao.ItemPedidoReactiveDao;
+import com.jdasilva.socialweb.tienda.app.domain.document.model.ItemPedido;
 
 @Service
-public class ItemPedidoServiceImpl implements ItemPedidoService {
+public class ItemPedidoReactiveServiceImpl implements ItemPedidoReactiveService {
 
 	@Autowired
-	ItemPedidoDao itemPedidoDao;
+	ItemPedidoReactiveDao itemPedidoDao;
 
 	@Transactional(readOnly = true)
 	@Override
@@ -24,16 +24,16 @@ public class ItemPedidoServiceImpl implements ItemPedidoService {
 
 	@Transactional
 	@Override
-	public Iterable<ItemPedido> save(Iterable<ItemPedido> pedidos) {
+	public Iterable<ItemPedido> insert(Iterable<ItemPedido> pedidos) {
 
-		return itemPedidoDao.saveAll(pedidos);
+		return itemPedidoDao.insert(pedidos);
 
 	}
 
 	@Transactional
 	@Override
-	public ItemPedido save(ItemPedido pedido) {
+	public ItemPedido insert(ItemPedido pedido) {
 
-		return itemPedidoDao.save(pedido);
+		return itemPedidoDao.insert(pedido);
 	}
 }

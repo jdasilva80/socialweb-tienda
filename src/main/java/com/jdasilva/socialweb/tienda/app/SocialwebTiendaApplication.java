@@ -2,12 +2,12 @@ package com.jdasilva.socialweb.tienda.app;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
+//import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,7 +17,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
-import org.springframework.data.mongodb.core.MongoTemplate;
+//import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -28,16 +28,12 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import com.jdasilva.socialweb.commons.interceptors.FlashAttributesInterceptor;
-import com.jdasilva.socialweb.commons.models.document.Producto;
-import com.jdasilva.socialweb.commons.models.entity.Usuario;
-//import com.jdasilva.socialweb.tienda.app.clientrest.ProductosClienteRestFeign;
-//import com.jdasilva.socialweb.tienda.app.clientrest.UsuariosClienteRestFeign;
-import com.jdasilva.socialweb.tienda.app.domain.model.ItemPedido;
-import com.jdasilva.socialweb.tienda.app.domain.model.Pedido;
-import com.jdasilva.socialweb.tienda.app.domain.service.IProductoService;
-import com.jdasilva.socialweb.tienda.app.domain.service.IUsuarioService;
-import com.jdasilva.socialweb.tienda.app.domain.service.ItemPedidoService;
-import com.jdasilva.socialweb.tienda.app.domain.service.PedidoService;
+//import com.jdasilva.socialweb.commons.models.document.Producto;
+//import com.jdasilva.socialweb.tienda.app.domain.document.model.ItemPedido;
+import com.jdasilva.socialweb.tienda.app.domain.document.model.Pedido;
+//import com.jdasilva.socialweb.tienda.app.domain.service.IProductoReactiveService;
+//import com.jdasilva.socialweb.tienda.app.domain.service.IProductoService;
+//import com.jdasilva.socialweb.tienda.app.domain.service.IUsuarioService;
 
 //@EnableMongoRepositories(basePackageClasses = {PedidoDao.class})
 @EnableMongoAuditing // es necesario para que funcione @createdData
@@ -45,31 +41,30 @@ import com.jdasilva.socialweb.tienda.app.domain.service.PedidoService;
 @EnableFeignClients
 @SpringBootApplication
 @ComponentScan(basePackageClasses = { FlashAttributesInterceptor.class, SocialwebTiendaApplication.class })
-@EntityScan(basePackageClasses = { Producto.class, Pedido.class })
+@EntityScan(basePackageClasses = { Pedido.class,
+		com.jdasilva.socialweb.tienda.app.domain.relational.model.Pedido.class })
 public class SocialwebTiendaApplication implements CommandLineRunner {
 
 //	private ObjectFactory<HttpMessageConverters> messageConverters = HttpMessageConverters::new;
 
-	@Autowired
-	private PedidoService pedidoService;
-
-	@Autowired
-	private ItemPedidoService itemPedidoService;
+//	@Autowired
+//	private PedidoService pedidoService;
+//
+//	@Autowired
+//	private ItemPedidoService itemPedidoService;
 
 //	@Autowired
-//	ProductosClienteRestFeign productosClient;
-	@Autowired
-	@Qualifier("productoRestServiceTienda")
-	private IProductoService productoService;
+//	@Qualifier("productoRestServiceTienda")
+//	@Qualifier("productoFeignServiceTienda")
+//	private IProductoService productoService;
+//
+//	@Autowired
+//	@Qualifier("usuarioRestServiceTienda")
+//	@Qualifier("usuarioFeingService")
+//	private IUsuarioService usuarioService;
 
 //	@Autowired
-//	UsuariosClienteRestFeign usuariosClient;	
-	@Autowired
-	@Qualifier("usuarioRestServiceTienda")
-	private IUsuarioService usuarioService;
-
-	@Autowired
-	private MongoTemplate mongoTemplate;
+//	private MongoTemplate mongoTemplate;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SocialwebTiendaApplication.class, args);
@@ -78,19 +73,19 @@ public class SocialwebTiendaApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		mongoTemplate.dropCollection(ItemPedido.class);
-		mongoTemplate.dropCollection(Pedido.class);
-		mongoTemplate.createCollection(Pedido.class);
-		mongoTemplate.createCollection(ItemPedido.class);
+//		mongoTemplate.dropCollection(ItemPedido.class);
+//		mongoTemplate.dropCollection(Pedido.class);
+//		mongoTemplate.createCollection(Pedido.class);
+//		mongoTemplate.createCollection(ItemPedido.class);
 
-		List<LinkedHashMap<String, ?>> usuarios = (List<LinkedHashMap<String, ?>>) usuarioService.findAll()
-				.get("_embedded").get("usuarios");
+//		List<LinkedHashMap<String, ?>> usuarios = (List<LinkedHashMap<String, ?>>) usuarioService.findAll()
+//				.get("_embedded").get("usuarios");
 
-		List<Producto> productos = productoService.findAll();
-
-		usuarios.forEach(
-
-				(element) -> {
+//		List<com.jdasilva.socialweb.commons.models.productos.entity.Producto> productos = productoService.findAll();
+//
+//		usuarios.forEach(
+//
+//				(element) -> {
 //					Pedido pedido = new Pedido();
 //					pedido.setUsuario(
 //							usuarioService.findByUsername((String) ((LinkedHashMap<?, ?>) element).get("username")));
@@ -105,7 +100,7 @@ public class SocialwebTiendaApplication implements CommandLineRunner {
 //
 //					});
 //					pedidoService.insert(pedido);
-				});
+//				});
 	}
 
 	@Bean
@@ -131,12 +126,13 @@ public class SocialwebTiendaApplication implements CommandLineRunner {
 
 		Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
 		jaxb2Marshaller
-				.setClassesToBeBound(new Class[] { com.jdasilva.socialweb.tienda.app.view.xml.ProductosWrapper.class});
+				.setClassesToBeBound(new Class[] { com.jdasilva.socialweb.tienda.app.view.xml.ProductosWrapper.class });
 		// ProductosList -> clase envoltorio, ya que no se puede hacer marshelling de
-		// Collections(list,set,..) directamente con jaxb (con json no es necesario, es directo)
+		// Collections(list,set,..) directamente con jaxb (con json no es necesario, es
+		// directo)
 		return jaxb2Marshaller;
 	}
-	
+
 	@Bean
 	// @LoadBalanced para usar ribbon con restamplate
 	public RestTemplate restTemplate() {

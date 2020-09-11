@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import com.jdasilva.socialweb.commons.models.entity.Usuario;
+import com.jdasilva.socialweb.commons.models.usuarios.entity.Usuario;
 
 @Service("usuarioRestServiceTienda")
 public class UsuarioServiceImpl implements IUsuarioService {

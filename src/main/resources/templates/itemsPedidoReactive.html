@@ -47,7 +47,7 @@
 		
 					<tbody>
 						<tr th:each="item : ${pedido.items}">
-							<td th:text="${#strings.abbreviate(item.productoId,10)}"></td>
+							<td th:text="${#strings.abbreviate(item.producto.id,10)}"></td>
 							<td>
 								<img th:alt="${item.producto.foto}" th:src="@{'/api/socialweb-tienda/tienda/productos/uploads/' + ${item.producto.foto}}"											
 										style="max-width: 50%; max-height: 50%" class="img-thumbnail rounded">

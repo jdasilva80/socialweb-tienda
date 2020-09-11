@@ -12,14 +12,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.view.document.AbstractPdfView;
 
-import com.jdasilva.socialweb.tienda.app.domain.relational.model.Pedido;
+import com.jdasilva.socialweb.tienda.app.domain.document.model.Pedido;
 import com.lowagie.text.Document;
 import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 
-@Component("itemsPedido") //tiene que tener el nombre de la vista que devuelve el handler
-public class PedidoPdfView extends AbstractPdfView {
+@Component("itemsPedidoReactive") //tiene que tener el nombre de la vista que devuelve el handler
+public class PedidoReactivePdfView extends AbstractPdfView {
 
 	@Autowired
 	private MessageSource messages;
@@ -53,7 +53,7 @@ public class PedidoPdfView extends AbstractPdfView {
 		PdfPTable table2 = new PdfPTable(1);
 		table2.setSpacingAfter(20);
 		table2.addCell("Datos del pedido.");
-		table2.addCell("Id: ".concat(pedido.getId().toString()));
+		table2.addCell("Id: ".concat(pedido.getId()));
 		table2.addCell("Fecha: ".concat(pedido.getFecha().toString()));
 		table2.addCell("Observación: ".concat(pedido.getObservacion() == null ? "" : pedido.getObservacion()));
 

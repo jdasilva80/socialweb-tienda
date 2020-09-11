@@ -50,10 +50,10 @@
 							<tr th:each="item : ${cesta.items}">
 
 								<td class="d-none">
-									<input type="hidden" th:value="${item.productoId}" name="producto_id[]" />
+									<input type="hidden" th:value="${item.producto.id}" name="producto_id[]" />
 								</td>
 
-								<td th:text="${#strings.abbreviate(item.productoId,10)}"></td>
+								<td th:text="${#strings.abbreviate(item.producto.id,10)}"></td>
 								
 								<td><img th:alt="${item.producto.foto}"
 									th:src="@{'/api/socialweb-tienda/tienda/productos/uploads/' + ${item.producto.foto}}"
@@ -67,15 +67,15 @@
 
 								<td th:text="${item.producto.nombre}"></td>
 
-								<td th:id="'precio_'+ ${item.productoId}"
+								<td th:id="'precio_'+ ${item.producto.id}"
 									th:text="${item.producto.precio}"></td>
 
 								<td><input type="number" name="cantidad[]" min="1"
-									th:id="'cantidad_'+ ${item.productoId}" class="form-control"
+									th:id="'cantidad_'+ ${item.producto.id}" class="form-control"
 									th:value="${item.cantidad}" onchange="itemsHelper.calcularTotal(); itemsHelper.guardarCantidad(this)" /></td>
 
 								<td><a class="btn btn-danger btn-xs"
-									th:href="@{/api/socialweb-tienda/tienda/pedidos/vaciarcesta/producto/} + ${item.productoId}"
+									th:href="@{/api/socialweb-tienda/tienda/pedidos/vaciarcesta/producto/} + ${item.producto.id}"
 									th:text="eliminar"
 									onclick="confirm('Desea eliminar el registro?')"> </a></td>
 							</tr>

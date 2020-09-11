@@ -6,13 +6,13 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.jdasilva.socialweb.commons.models.productos.entity.Producto;
+import com.jdasilva.socialweb.commons.models.document.Producto;
 
-public interface IProductoService {
+public interface IProductoReactiveService {
 
 	public List<Producto> findAll();
 
-	public Producto findById(@PathVariable Long productoId);
+	public Producto findById(@PathVariable String productoId);
 
 	public ResponseEntity<Resource> uploads(@PathVariable String filename);
 

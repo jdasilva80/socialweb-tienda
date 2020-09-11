@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="componentes/layout :: head"></head>
+
+<body>
+
+	<header th:replace="componentes/layout :: header"></header>
+	
+	<div class="container py-4">
+	
+		<div class="card bg-light">
+			<div>
+				<a th:href="@{'/api/socialweb-tienda/tienda/pedidos' (format=csv)}" class="btn btn-primary btn-xs col-sm-1  my-1 mx-1 float-right">CSV</a>
+			</div>
+		
+			<div class="card-header" th:text="${titulo}"></div>
+			
+			<div class="card-body">
+				
+				<table class="table table-striped" th:if="${pedidos!=null}">
+		
+					<thead>
+						<th>ID</th>
+						<th th:text="#{text.usuario.nombre}">>USERNAME</th>
+						<th th:text="#{text.usuario.email}">EMAIL</th>
+						<th th:text="#{text.pedido.fecha}">FECHA</th>
+						<th th:text="#{text.pedido.observacion}">OBSERVACION</th>
+						<th th:text="#{text.pedido.consultar}">CONSULTAR</th>
+						<th th:text="#{text.pedido.eliminar}">ELIMINAR</th>
+					</thead>
+		
+					<tbody>
+						<tr th:each="pedido : ${pedidos}">
+							<td th:text="${#strings.abbreviate(pedido.id,10)}"></td>
+							<td th:if="${pedido.usuario != null}" th:text="${pedido.usuario.username}"></td>
+							<td th:if="${pedido.usuario != null}" th:text="${pedido.usuario.email}"></td>
+							<td th:text="${pedido.fecha}"></td>
+							<td th:text="${pedido.observacion}"></td>
+							<td>
+								<a class="btn btn-primary btn-xs" th:href="@{/api/socialweb-tienda/tienda/pedidos/} + ${pedido.id}" th:text="'consultar'"> </a>
+							</td>
+							<td>
+								<a class="btn btn-danger btn-xs" th:href="@{/api/socialweb-tienda/tienda/pedidos/eliminar/} + ${pedido.id}" th:text="eliminar" 
+										onclick="confirm('Desea eliminar el registro?')"> </a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				
+			</div>
+		</div>
+	</div>
+	
+	<footer th:replace="componentes/layout :: footer"></footer>
+	
+</body>
+</html>
