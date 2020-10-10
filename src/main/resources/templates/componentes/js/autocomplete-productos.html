@@ -79,11 +79,11 @@ function buscarProductos(){
         		
             	linea = linea.replace(/{ID}/g, data[i].id);
         		
-				/*var foto = "<img th:alt="  +data[i].foto +"\ src=https://soyjose-productos.herokuapp.com/apirest/productos/uploads/" + data[i].foto +											
-				" style=\"max-width: 50%; max-height: 50%\" class=\"img-thumbnail rounded\">";*/
-				
-				var foto = "<img th:alt="  +data[i].foto +"\ src=/api/socialweb-tienda/tienda/productos/uploads/" + data[i].foto +											
+				var foto = "<img th:alt="  +data[i].foto +"\ src=https://soyjose-productos.herokuapp.com/apirest/productos/uploads/" + data[i].foto +											
 				" style=\"max-width: 50%; max-height: 50%\" class=\"img-thumbnail rounded\">";
+				
+				/*var foto = "<img th:alt="  +data[i].foto +"\ src=/api/socialweb-tienda/tienda/productos/uploads/" + data[i].foto +											
+				" style=\"max-width: 50%; max-height: 50%\" class=\"img-thumbnail rounded\">";*/
         		
 				linea = linea.replace(/{FOTO}/g, foto);
     			linea = linea.replace(/{NOMBRE}/g, data[i].nombre);
