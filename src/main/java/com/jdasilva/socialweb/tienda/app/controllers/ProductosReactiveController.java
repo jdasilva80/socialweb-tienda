@@ -28,12 +28,12 @@ import com.jdasilva.socialweb.tienda.app.view.xml.ProductosReactiveWrapper;
 @SessionAttributes("cesta")
 public class ProductosReactiveController {
 
-	@Autowired
+	@Autowired(required = false)
 	@Qualifier("productoRestServiceTienda")
 	//@Qualifier("productoReactiveFeignServiceTienda")
 	private IProductoReactiveService productoService;
 
-	@Autowired
+	@Autowired(required = false)
 	PedidoReactiveService pedidoService;
 
 //	@Autowired

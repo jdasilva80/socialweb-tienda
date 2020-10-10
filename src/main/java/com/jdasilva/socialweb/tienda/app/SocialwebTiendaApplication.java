@@ -16,7 +16,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.mongodb.config.EnableMongoAuditing;
+//import org.springframework.data.mongodb.config.EnableMongoAuditing;
 //import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -36,7 +36,7 @@ import com.jdasilva.socialweb.tienda.app.domain.document.model.Pedido;
 //import com.jdasilva.socialweb.tienda.app.domain.service.IUsuarioService;
 
 //@EnableMongoRepositories(basePackageClasses = {PedidoDao.class})
-@EnableMongoAuditing // es necesario para que funcione @createdData
+//@EnableMongoAuditing // es necesario para que funcione @createdData
 @EnableEurekaClient
 @EnableFeignClients
 @SpringBootApplication

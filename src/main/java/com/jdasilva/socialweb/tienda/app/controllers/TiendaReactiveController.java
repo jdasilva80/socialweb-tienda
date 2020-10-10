@@ -20,12 +20,12 @@ import com.jdasilva.socialweb.tienda.app.domain.service.PedidoReactiveService;
 @RequestMapping("/reactive/tienda")
 public class TiendaReactiveController {
 
-	@Autowired
+	@Autowired(required = false)
 	@Qualifier("productoReactiveRestServiceTienda")
 	//@Qualifier("productoReactiveFeignServiceTienda")
 	private IProductoReactiveService productoService;
 
-	@Autowired
+	@Autowired(required = false)
 	PedidoReactiveService pedidoService;
 
 //	@Autowired

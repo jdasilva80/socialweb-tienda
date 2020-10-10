@@ -38,10 +38,10 @@ import com.jdasilva.socialweb.tienda.app.domain.service.PedidoReactiveService;
 @SessionAttributes("cesta")
 public class PedidosReactiveController {
 
-	@Autowired
+	@Autowired(required = false)
 	PedidoReactiveService pedidoService;
 
-	@Autowired
+	@Autowired(required = false)
 	@Qualifier("productoReactiveRestServiceTienda")
 	//@Qualifier("productoReactiveFeignServiceTienda")
 	private IProductoReactiveService productoService;
