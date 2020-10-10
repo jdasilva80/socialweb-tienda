@@ -49,8 +49,8 @@ public class PedidosController {
 	private IProductoService productoService;
 
 	@Autowired
-//	@Qualifier("usuarioRestServiceTienda")
-	@Qualifier("usuarioFeingService")	
+	@Qualifier("usuarioRestServiceTienda")
+	//@Qualifier("usuarioFeingService")	
 	private IUsuarioService usuarioService;
 
 	@Autowired

@@ -39,11 +39,10 @@ public class ProductosController {
 
 	@Autowired
 	PedidoReactiveService pedidoService;
-
-//	@Autowired
-//	UsuariosClienteRestFeign usuariosClient;
+	
 	@Autowired
-	@Qualifier("usuarioFeingService")
+	@Qualifier("usuarioRestServiceTienda")
+	//@Qualifier("usuarioFeingService")	
 	private IUsuarioService usuarioService;
 
 	@GetMapping(value = { "/", "" })
