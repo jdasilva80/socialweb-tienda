@@ -13,8 +13,8 @@ import com.jdasilva.socialweb.tienda.app.clientrest.ProductosClienteRestFeign;
 @Service("productoFeignServiceTienda")
 public class ProductoServiceFeign implements IProductoService {
 
-	//@Autowired(required = false)
-	@Autowired
+	@Autowired(required = false)
+	//@Autowired
 	private ProductosClienteRestFeign productosRestFeign;
 
 	@Override
