@@ -29,8 +29,8 @@ import com.jdasilva.socialweb.tienda.app.view.xml.ProductosReactiveWrapper;
 public class ProductosReactiveController {
 
 	@Autowired
-	//@Qualifier("productoRestServiceTienda")
-	@Qualifier("productoReactiveFeignServiceTienda")
+	@Qualifier("productoRestServiceTienda")
+	//@Qualifier("productoReactiveFeignServiceTienda")
 	private IProductoReactiveService productoService;
 
 	@Autowired

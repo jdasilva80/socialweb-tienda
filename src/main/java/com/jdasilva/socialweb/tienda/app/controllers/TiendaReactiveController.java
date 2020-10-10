@@ -21,8 +21,8 @@ import com.jdasilva.socialweb.tienda.app.domain.service.PedidoReactiveService;
 public class TiendaReactiveController {
 
 	@Autowired
-//	@Qualifier("productoReactiveRestServiceTienda")
-	@Qualifier("productoReactiveFeignServiceTienda")
+	@Qualifier("productoReactiveRestServiceTienda")
+	//@Qualifier("productoReactiveFeignServiceTienda")
 	private IProductoReactiveService productoService;
 
 	@Autowired

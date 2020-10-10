@@ -42,8 +42,8 @@ public class PedidosReactiveController {
 	PedidoReactiveService pedidoService;
 
 	@Autowired
-//	@Qualifier("productoReactiveRestServiceTienda")
-	@Qualifier("productoReactiveFeignServiceTienda")
+	@Qualifier("productoReactiveRestServiceTienda")
+	//@Qualifier("productoReactiveFeignServiceTienda")
 	private IProductoReactiveService productoService;
 
 //	@Autowired

@@ -33,8 +33,8 @@ public class ProductosController {
 	private static final Logger logger = LoggerFactory.getLogger(ProductosController.class);
 	
 	@Autowired
-	//@Qualifier("productoRestServiceTienda")
-	@Qualifier("productoFeignServiceTienda")
+	@Qualifier("productoRestServiceTienda")
+	//@Qualifier("productoFeignServiceTienda")
 	private IProductoService productoService;
 
 	@Autowired
