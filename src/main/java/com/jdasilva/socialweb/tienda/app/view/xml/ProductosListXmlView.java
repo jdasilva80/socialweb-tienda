@@ -48,6 +48,8 @@ public class ProductosListXmlView extends MarshallingView {
 
 			for (int i = 0; i < productos.size(); i++) {
 
+				Producto prod = new Producto();
+
 				for (Map.Entry<?, ?> entry : productos.get(i).entrySet()) {
 
 					logger.info(" *********************** class--> i:" + i + " " + entry.getClass());
@@ -56,8 +58,6 @@ public class ProductosListXmlView extends MarshallingView {
 					logger.info(" --------------------- key, " + key.toString());
 					Object value = entry.getValue();
 					logger.info(" --------------------- value, " + value.toString());
-
-					Producto prod = new Producto();
 
 					if ("precio".equals(key)) {
 						prod.setPrecio((Double) value);
@@ -91,9 +91,8 @@ public class ProductosListXmlView extends MarshallingView {
 						cat.setNombre((String)((Map)value).get("nombre"));						
 						prod.setCategoria(cat);
 					}
-
-					productosArray[i] = prod;
 				}
+				productosArray[i] = prod;
 			}
 			productosList = new ProductosWrapper(productosArray);
 
