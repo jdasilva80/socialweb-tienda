@@ -54,7 +54,7 @@ public class TiendaController {
 		
 		if(productos.size()>0) {
 
-			logger.info("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  productos.size " + productos.size());
+			logger.info("======================= productos.size " + productos.size());
 //			Producto[] productosArray = new Producto[productos.size()];
 //			productosArray = productos.toArray(productosArray);			
 //			model.addAttribute("productos", productosArray);
