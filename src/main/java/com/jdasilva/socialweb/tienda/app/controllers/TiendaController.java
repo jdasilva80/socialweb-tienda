@@ -2,6 +2,8 @@ package com.jdasilva.socialweb.tienda.app.controllers;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -14,19 +16,21 @@ import com.jdasilva.socialweb.commons.models.productos.entity.Producto;
 import com.jdasilva.socialweb.tienda.app.domain.service.IProductoService;
 //import com.jdasilva.socialweb.tienda.app.clientrest.UsuariosClienteRestFeign;
 import com.jdasilva.socialweb.tienda.app.domain.service.IUsuarioService;
-import com.jdasilva.socialweb.tienda.app.domain.service.PedidoReactiveService;
+//import com.jdasilva.socialweb.tienda.app.domain.service.PedidoReactiveService;
 
 @Controller
 @RequestMapping("/tienda")
 public class TiendaController {
 
+	private static final Logger logger = LoggerFactory.getLogger(TiendaController.class);	
+	
 	@Autowired
 	@Qualifier("productoRestServiceTienda")
 	//@Qualifier("productoFeignServiceTienda")
 	private IProductoService productoService;
 
-	@Autowired
-	PedidoReactiveService pedidoService;
+//	@Autowired
+//	PedidoReactiveService pedidoService;
 
 //	@Autowired
 //	UsuariosClienteRestFeign usuariosClient;
@@ -50,7 +54,8 @@ public class TiendaController {
 		
 		if(productos.size()>0) {
 
-			Producto[] productosArray = new Producto[productoService.findAll().size()];
+			logger.info("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  productos.size " + productos.size());
+			Producto[] productosArray = new Producto[productos.size()];
 			productosArray = productoService.findAll().toArray(productosArray);			
 			model.addAttribute("productos", productosArray);
 		}
