@@ -36,7 +36,9 @@ public class ProductosListXmlView extends MarshallingView {
 		if(productos.size()>0) {
 			
 			Producto[] productosArray = new Producto[productos.size()];
-			productosArray = productos.toArray(productosArray);
+			for(int i=0; i<productos.size(); i++) {
+				productosArray[i] = productos.get(i);
+			}
 			productosList = new ProductosWrapper(productosArray);
 			
 		}else {			
