@@ -1,5 +1,6 @@
 package com.jdasilva.socialweb.tienda.app.view.xml;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,11 +26,22 @@ public class ProductosListXmlView extends MarshallingView {
 			HttpServletResponse response) throws Exception {
 
 		model.remove("titulo");
-		Producto[] productos = (Producto[]) model.get("productos");
+		//Producto[] productos = (Producto[]) model.get("productos");
+		List<Producto> productos = (List<Producto>) model.get("productos");		
 		model.remove("productos");
 		model.remove("mensajeFlash");
-
-		ProductosWrapper productosList = new ProductosWrapper(productos);
+		
+		ProductosWrapper productosList = null; 
+		
+		if(productos.size()>0) {
+			
+			Producto[] productosArray = new Producto[productos.size()];
+			productosArray = productos.toArray(productosArray);
+			productosList = new ProductosWrapper(productosArray);
+			
+		}else {			
+			productosList = new ProductosWrapper();
+		}
 		model.put("productosList", productosList);
 
 		super.renderMergedOutputModel(model, request, response);
