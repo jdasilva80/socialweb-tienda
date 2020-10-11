@@ -32,7 +32,8 @@ public class ProductosListXmlView extends MarshallingView {
 
 		model.remove("titulo");
 		//Producto[] productos = (Producto[]) model.get("productos");
-		List<LinkedHashMap<?,?>> productos = (List<LinkedHashMap<?,?>>) model.get("productos");		
+		List<Producto> productos = (List<Producto>) model.get("productos");	
+		logger.info("¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨- productos.size " + productos.size());
 		model.remove("productos");
 		model.remove("mensajeFlash");
 		
