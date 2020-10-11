@@ -1,5 +1,6 @@
 package com.jdasilva.socialweb.tienda.app.view.xml;
 
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,11 +15,12 @@ import org.springframework.oxm.Marshaller;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.xml.MarshallingView;
 
+import com.jdasilva.socialweb.commons.models.productos.entity.Categoria;
 import com.jdasilva.socialweb.commons.models.productos.entity.Producto;
 
 @Component("home.xml")
 public class ProductosListXmlView extends MarshallingView {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(ProductosListXmlView.class);
 
 	@Autowired
@@ -31,47 +33,60 @@ public class ProductosListXmlView extends MarshallingView {
 			HttpServletResponse response) throws Exception {
 
 		model.remove("titulo");
-		//Producto[] productos = (Producto[]) model.get("productos");
-		List<Producto> productos = (List<Producto>) model.get("productos");	
-		logger.info("¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨- productos.size " + productos.size());
+		// Producto[] productos = (Producto[]) model.get("productos");
+		List<LinkedHashMap<?, ?>> productos = (List<LinkedHashMap<?, ?>>) model.get("productos");
 		model.remove("productos");
 		model.remove("mensajeFlash");
-		
-		ProductosWrapper productosList = null; 
-		
-		if(productos.size()>0) {
-			
+
+		ProductosWrapper productosList = null;
+
+		if (productos.size() > 0) {
+
 			Producto[] productosArray = new Producto[productos.size()];
-			
-			for(int i=0; i<productos.size(); i++) {	
-				productosArray[i] = productos.get(i);
+
+			for (int i = 0; i < productos.size(); i++) {
+
+				for (Map.Entry<?, ?> entry : productos.get(i).entrySet()) {
+
+					logger.info(" *********************** class--> i:" + i + " " + entry.getClass());
+
+					Object key = entry.getKey();
+					logger.info(" --------------------- key, " + key.toString());
+					Object value = entry.getValue();
+					logger.info(" --------------------- value, " + value.toString());
+
+					Producto prod = new Producto();
+
+					if ("precio".equals(key)) {
+						prod.setPrecio((Double) value);
+
+					} else if ("foto".equals(key)) {
+						prod.setFoto((String) value);
+
+					} else if ("nombre".equals(key)) {
+						prod.setNombre((String) value);
+
+					} else if ("createAt".equals(key)) {
+						prod.setCreateAt((Date) value);
+						
+					} else if ("id".equals(key)) {
+						prod.setId((Long) value);
+					
+					} else if ("categoria".equals(key)) {
+						
+						Categoria cat = new Categoria();						
+						cat.setId((Long)((Map)value).get("id"));
+						cat.setNombre((String)((Map)value).get("nombre"));						
+						prod.setCategoria(cat);
+					}
+					
+				}
 			}
-			
-//			for(int i=0; i<productos.size(); i++) {				
-//				
-//				for (Map.Entry<?, ?> entry : productos.get(i).entrySet()) {
-//					
-//					logger.info(" *********************** class--> i:"+ i + " " + entry.getClass());
-//				    
-//					Object key = entry.getKey();
-//					logger.info(" --------------------- key, " + key.toString());
-//				    Object value = entry.getValue();
-//				    logger.info(" --------------------- value, " +value.toString());
-//				    
-//				    if(value instanceof Producto) {
-//
-//					    logger.info(" --------------------- value, " + ((Producto)value).getNombre());
-//						productosArray[i] = (Producto)value;
-//						
-//				    }else if(key instanceof Producto) {
-//				    	logger.info(" :::::::::::::::::::::: key, " + ((Producto)value).getNombre());
-//						productosArray[i] = (Producto)key;
-//				    }
-//				}
-//			}
 			productosList = new ProductosWrapper(productosArray);
-			
-		}else {			
+
+		} else
+
+		{
 			productosList = new ProductosWrapper();
 		}
 		model.put("productosList", productosList);
