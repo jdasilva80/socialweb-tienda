@@ -45,17 +45,19 @@ public class ProductosListXmlView extends MarshallingView {
 			for(int i=0; i<productos.size(); i++) {				
 				
 				for (Map.Entry<?, ?> entry : productos.get(i).entrySet()) {
+					
+					logger.info(" *********************** class " + entry.getClass());
 				    
 					Object key = entry.getKey();
 				    Object value = entry.getValue();
 				    
 				    if(value instanceof Producto) {
 
-					    logger.info(" &&&&&&&&&&&&&&&&&&&&&& value, " + ((Producto)value).getNombre());
+					    logger.info(" --------------------- value, " + ((Producto)value).getNombre());
 						productosArray[i] = (Producto)value;
 						
 				    }else if(key instanceof Producto) {
-				    	logger.info(" &&&&&&&&&&&&&&&&&&&&&& key, " + ((Producto)value).getNombre());
+				    	logger.info(" :::::::::::::::::::::: key, " + ((Producto)value).getNombre());
 						productosArray[i] = (Producto)key;
 				    }
 				}
