@@ -46,10 +46,12 @@ public class ProductosListXmlView extends MarshallingView {
 				
 				for (Map.Entry<?, ?> entry : productos.get(i).entrySet()) {
 					
-					logger.info(" *********************** class " + entry.getClass());
+					logger.info(" *********************** class--> i:"+ i + " " + entry.getClass());
 				    
 					Object key = entry.getKey();
+					logger.info(" --------------------- key, " + key.toString());
 				    Object value = entry.getValue();
+				    logger.info(" --------------------- value, " +value.toString());
 				    
 				    if(value instanceof Producto) {
 
