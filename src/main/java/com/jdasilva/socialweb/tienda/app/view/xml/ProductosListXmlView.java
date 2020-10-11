@@ -70,7 +70,7 @@ public class ProductosListXmlView extends MarshallingView {
 
 					} else if ("createAt".equals(key)) {
 						
-						SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+						SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
 				        Date fechaDate = null;
 				        try {
 				            fechaDate = formato.parse((String)value);
