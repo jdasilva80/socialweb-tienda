@@ -1,5 +1,7 @@
 package com.jdasilva.socialweb.tienda.app.view.xml;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -67,7 +69,17 @@ public class ProductosListXmlView extends MarshallingView {
 						prod.setNombre((String) value);
 
 					} else if ("createAt".equals(key)) {
-						//prod.setCreateAt((Date) value);
+						
+						SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+				        Date fechaDate = null;
+				        try {
+				            fechaDate = formato.parse((String)value);
+				            prod.setCreateAt(fechaDate);
+				        } 
+				        catch (ParseException ex) 
+				        {
+				            logger.error("--error " + ex.getMessage());
+				        }
 						
 					} else if ("id".equals(key)) {
 						prod.setId(((Integer) value).longValue());
@@ -79,7 +91,8 @@ public class ProductosListXmlView extends MarshallingView {
 						cat.setNombre((String)((Map)value).get("nombre"));						
 						prod.setCategoria(cat);
 					}
-					
+
+					productosArray[i] = prod;
 				}
 			}
 			productosList = new ProductosWrapper(productosArray);
