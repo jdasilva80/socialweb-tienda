@@ -43,6 +43,10 @@ public class ProductosListXmlView extends MarshallingView {
 			
 			Producto[] productosArray = new Producto[productos.size()];
 			
+			for(int i=0; i<productos.size(); i++) {	
+				productosArray[i] = productos.get(i);
+			}
+			
 //			for(int i=0; i<productos.size(); i++) {				
 //				
 //				for (Map.Entry<?, ?> entry : productos.get(i).entrySet()) {
