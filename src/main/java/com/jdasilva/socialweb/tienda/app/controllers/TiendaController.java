@@ -56,7 +56,7 @@ public class TiendaController {
 
 			logger.info("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  productos.size " + productos.size());
 			Producto[] productosArray = new Producto[productos.size()];
-			productosArray = productoService.findAll().toArray(productosArray);			
+			productosArray = productos.toArray(productosArray);			
 			model.addAttribute("productos", productosArray);
 		}
 		
