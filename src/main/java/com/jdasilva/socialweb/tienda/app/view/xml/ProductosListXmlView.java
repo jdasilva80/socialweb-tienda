@@ -67,7 +67,7 @@ public class ProductosListXmlView extends MarshallingView {
 						prod.setNombre((String) value);
 
 					} else if ("createAt".equals(key)) {
-						prod.setCreateAt((Date) value);
+						//prod.setCreateAt((Date) value);
 						
 					} else if ("id".equals(key)) {
 						prod.setId(((Integer) value).longValue());
