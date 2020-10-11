@@ -70,12 +70,12 @@ public class ProductosListXmlView extends MarshallingView {
 						prod.setCreateAt((Date) value);
 						
 					} else if ("id".equals(key)) {
-						prod.setId((Long) value);
+						prod.setId(((Integer) value).longValue());
 					
 					} else if ("categoria".equals(key)) {
 						
 						Categoria cat = new Categoria();						
-						cat.setId((Long)((Map)value).get("id"));
+						cat.setId(((Integer)((Map)value).get("id")).longValue());
 						cat.setNombre((String)((Map)value).get("nombre"));						
 						prod.setCategoria(cat);
 					}
