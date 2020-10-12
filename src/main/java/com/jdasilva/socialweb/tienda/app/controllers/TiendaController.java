@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jdasilva.socialweb.commons.models.productos.entity.Producto;
 //import com.jdasilva.socialweb.tienda.app.clientrest.ProductosClienteRestFeign;
@@ -37,6 +38,12 @@ public class TiendaController {
 	@Autowired
 	@Qualifier("usuarioRestServiceTienda")
 	private IUsuarioService usuarioService;
+	
+	@GetMapping(value = { "/prueba" })
+	public @ResponseBody Integer prueba() {
+
+		return 1;
+	}
 
 	@GetMapping({ "/", "" })
 	public String home(Model model) {
